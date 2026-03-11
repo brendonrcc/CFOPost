@@ -50,8 +50,8 @@
         // --- CONSTANTS ---
         const MACRO_URL = "https://script.google.com/macros/s/AKfycbx5Go-UGIcQvyA3vefhhl5Rc6-930cG9LsCRb1JPKzTHN5dNfBUCsD063K5RCyANGplEA/exec";
         
-        // AVISO: Se você criou uma nova implantação (deploy) com o código do novo macro, substitua a URL abaixo!
-        const MACRO_RETIFICACAO_URL = "https://script.google.com/macros/s/AKfycbxBKVSbhnYwFXJfKFAPKj0_qMF0P2pvYq_SOXD4XHQGIJkkSHtyMPmdOesP-KUSVZx0jw/exec";
+        // Retificações
+        const MACRO_RETIFICACAO_URL = "https://script.google.com/macros/s/AKfycbxQ2j9RCT2c4LNs0pYRxMJoEu_m-rw_zfG-15Q15qt4KQ9fxdyrvxp5gXbdONUmFoeAqg/exec";
         
         // Configurações de API do Cloudflare Worker
         const MACRO_GET_MPS_URL = "https://api-professor-dashboard.brendonhbrcc.workers.dev/?gid=2116872062";
