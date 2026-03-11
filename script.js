@@ -1,4 +1,4 @@
-   const { useState, useEffect, useMemo, useRef } = React;
+    const { useState, useEffect, useMemo, useRef } = React;
 
         const kebabToPascal = (str) =>
             str.replace(/-([a-z0-9])/g, (g) => g[1].toUpperCase())
@@ -439,21 +439,21 @@
                                     <label className="text-[10px] sm:text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest block">Aula/Curso</label>
                                     
                                     <div className="relative" ref={dropdownRef}>
-                                        <a 
-                                            href="#selecionar-aula"
+                                        <button 
+                                            type="button"
                                             onClick={(e) => { e.preventDefault(); setIsDropdownOpen(!isDropdownOpen); }}
                                             className={`w-full h-10 sm:h-12 md:h-14 pl-3 sm:pl-4 pr-10 bg-white dark:bg-black/20 border rounded-md text-xs md:text-sm font-bold text-slate-700 dark:text-white flex items-center justify-between cursor-pointer transition-all uppercase select-none hover:border-brand dark:hover:border-brand ${isDropdownOpen ? 'border-brand ring-1 ring-brand' : 'border-slate-200 dark:border-brand/20'}`}
                                         >
                                             <span className="truncate">{selectedType.name}</span>
                                             <ChevronDown className={`absolute right-3 sm:right-4 text-slate-400 transition-transform duration-200 pointer-events-none ${isDropdownOpen ? 'rotate-180' : ''}`} size={16} />
-                                        </a>
+                                        </button>
                                         
                                         {isDropdownOpen && (
                                             <div className="absolute z-50 w-full mt-2 bg-white dark:bg-[#1a231d] border border-slate-200 dark:border-brand/20 rounded-md overflow-hidden animate-fade-in shadow-lg">
                                                 {CLASS_TYPES_FEEDBACK.map(t => (
-                                                    <a 
+                                                    <button 
                                                         key={t.id}
-                                                        href={`#aula-${t.id}`}
+                                                        type="button"
                                                         onClick={(e) => {
                                                             e.preventDefault();
                                                             setSelectedType(t);
@@ -461,14 +461,14 @@
                                                             if (t.id !== 'admin') setIsAdminActivity(false);
                                                             setIsDropdownOpen(false);
                                                         }}
-                                                        className={`block px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] sm:text-xs md:text-sm font-bold uppercase transition-colors hover:underline ${
+                                                        className={`block w-full text-left px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] sm:text-xs md:text-sm font-bold uppercase transition-colors hover:underline ${
                                                             selectedType.id === t.id 
                                                                 ? 'bg-brand/10 text-brand dark:bg-brand/20 dark:text-brand-light' 
                                                                 : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/5 hover:text-brand dark:hover:text-brand-light'
                                                         }`}
                                                     >
                                                         {t.name}
-                                                    </a>
+                                                    </button>
                                                 ))}
                                             </div>
                                         )}
@@ -477,21 +477,21 @@
                                     {selectedType.id === 'admin' && (
                                         <div className="mt-2 p-2.5 sm:p-3 bg-brand/5 border border-brand/10 rounded-sm flex items-center gap-3 sm:gap-4">
                                             <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-brand">Tipo:</span>
-                                            <div className="flex items-center gap-4">
-                                                <a 
-                                                    href="#tipo-aula" 
+                                            <div className="flex items-center gap-2">
+                                                <button 
+                                                    type="button" 
                                                     onClick={(e) => { e.preventDefault(); setIsAdminActivity(false); }} 
-                                                    className={`text-[10px] sm:text-xs font-bold uppercase transition-all ${!isAdminActivity ? 'text-brand underline decoration-2 underline-offset-4' : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 hover:underline'}`}
+                                                    className={`px-3 py-1.5 rounded-md text-[10px] sm:text-xs font-bold uppercase transition-all ${!isAdminActivity ? 'bg-brand/20 text-brand dark:bg-brand/30 dark:text-brand-light' : 'text-slate-500 hover:text-slate-800 hover:bg-slate-200/50 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-white/5'}`}
                                                 >
                                                     Aula
-                                                </a>
-                                                <a 
-                                                    href="#tipo-atividade" 
+                                                </button>
+                                                <button 
+                                                    type="button" 
                                                     onClick={(e) => { e.preventDefault(); setIsAdminActivity(true); }} 
-                                                    className={`text-[10px] sm:text-xs font-bold uppercase transition-all ${isAdminActivity ? 'text-brand underline decoration-2 underline-offset-4' : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 hover:underline'}`}
+                                                    className={`px-3 py-1.5 rounded-md text-[10px] sm:text-xs font-bold uppercase transition-all ${isAdminActivity ? 'bg-brand/20 text-brand dark:bg-brand/30 dark:text-brand-light' : 'text-slate-500 hover:text-slate-800 hover:bg-slate-200/50 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-white/5'}`}
                                                 >
                                                     Atividade
-                                                </a>
+                                                </button>
                                             </div>
                                         </div>
                                     )}
@@ -958,34 +958,34 @@
                                     <label className="text-[10px] sm:text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest block cursor-pointer" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>Aula/Curso</label>
                                     
                                     <div className="relative" ref={dropdownRef}>
-                                        <a 
-                                            href="#selecionar-aula"
+                                        <button 
+                                            type="button"
                                             onClick={(e) => { e.preventDefault(); setIsDropdownOpen(!isDropdownOpen); }}
                                             className={`w-full h-10 sm:h-12 md:h-14 pl-3 sm:pl-4 pr-10 bg-white dark:bg-black/20 border rounded-md text-xs md:text-sm font-bold text-slate-700 dark:text-white flex items-center justify-between cursor-pointer transition-all uppercase select-none hover:border-brand dark:hover:border-brand ${isDropdownOpen ? 'border-brand ring-1 ring-brand' : 'border-slate-200 dark:border-brand/20'}`}
                                         >
                                             <span className="truncate">{selectedType.name}</span>
                                             <ChevronDown className={`absolute right-3 sm:right-4 text-slate-400 transition-transform duration-200 pointer-events-none ${isDropdownOpen ? 'rotate-180' : ''}`} size={16} />
-                                        </a>
+                                        </button>
                                         
                                         {isDropdownOpen && (
                                             <div className="absolute z-50 w-full mt-2 bg-white dark:bg-[#1a231d] border border-slate-200 dark:border-brand/20 rounded-md overflow-hidden animate-fade-in shadow-lg">
                                                 {CLASS_TYPES_FEEDBACK.map(t => (
-                                                    <a 
+                                                    <button 
                                                         key={t.id}
-                                                        href={`#aula-${t.id}`}
+                                                        type="button"
                                                         onClick={(e) => {
                                                             e.preventDefault();
                                                             setSelectedType(t);
                                                             setIsDropdownOpen(false);
                                                         }}
-                                                        className={`block px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] sm:text-xs md:text-sm font-bold uppercase cursor-pointer transition-colors hover:underline ${
+                                                        className={`block w-full text-left px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] sm:text-xs md:text-sm font-bold uppercase cursor-pointer transition-colors hover:underline ${
                                                             selectedType.id === t.id 
                                                                 ? 'bg-brand/10 text-brand dark:bg-brand/20 dark:text-brand-light' 
                                                                 : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/5 hover:text-brand dark:hover:text-brand-light'
                                                         }`}
                                                     >
                                                         {t.name}
-                                                    </a>
+                                                    </button>
                                                 ))}
                                             </div>
                                         )}
@@ -1228,33 +1228,33 @@
                                 <div className="space-y-2 sm:space-y-3">
                                     <label className="text-[10px] sm:text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest block cursor-pointer" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>Aula/Curso</label>
                                     <div className="relative" ref={dropdownRef}>
-                                        <a 
-                                            href="#selecionar-aula-mp"
+                                        <button 
+                                            type="button"
                                             onClick={(e) => { e.preventDefault(); setIsDropdownOpen(!isDropdownOpen); }}
                                             className={`w-full h-10 sm:h-12 md:h-14 pl-3 sm:pl-4 pr-10 bg-white dark:bg-black/20 border rounded-md text-xs md:text-sm font-bold text-slate-700 dark:text-white flex items-center justify-between cursor-pointer transition-all uppercase select-none hover:border-brand dark:hover:border-brand ${isDropdownOpen ? 'border-brand ring-1 ring-brand' : 'border-slate-200 dark:border-brand/20'}`}
                                         >
                                             <span className="truncate">{selectedType.name}</span>
                                             <ChevronDown className={`absolute right-3 sm:right-4 text-slate-400 transition-transform duration-200 pointer-events-none ${isDropdownOpen ? 'rotate-180' : ''}`} size={16} />
-                                        </a>
+                                        </button>
                                         {isDropdownOpen && (
                                             <div className="absolute z-50 w-full mt-2 bg-white dark:bg-[#1a231d] border border-slate-200 dark:border-brand/20 rounded-md overflow-hidden animate-fade-in shadow-lg">
                                                 {CLASS_TYPES_FEEDBACK.map(t => (
-                                                    <a 
+                                                    <button 
                                                         key={t.id}
-                                                        href={`#aula-${t.id}`}
+                                                        type="button"
                                                         onClick={(e) => {
                                                             e.preventDefault();
                                                             setSelectedType(t);
                                                             setIsDropdownOpen(false);
                                                         }}
-                                                        className={`block px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] sm:text-xs md:text-sm font-bold uppercase cursor-pointer transition-colors hover:underline ${
+                                                        className={`block w-full text-left px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] sm:text-xs md:text-sm font-bold uppercase cursor-pointer transition-colors hover:underline ${
                                                             selectedType.id === t.id 
                                                                 ? 'bg-brand/10 text-brand dark:bg-brand/20 dark:text-brand-light' 
                                                                 : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/5 hover:text-brand dark:hover:text-brand-light'
                                                         }`}
                                                     >
                                                         {t.name}
-                                                    </a>
+                                                    </button>
                                                 ))}
                                             </div>
                                         )}
@@ -1264,48 +1264,48 @@
                                 {selectedType.id === 'admin' ? (
                                     <div className="space-y-2 sm:space-y-3">
                                         <label className="text-[10px] sm:text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest block">Tipo de Material</label>
-                                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-center sm:justify-start gap-4 sm:gap-6 h-auto sm:h-12 md:h-14 py-3 sm:py-0 px-3 sm:px-4 bg-white dark:bg-black/20 border border-slate-200 dark:border-brand/20 rounded-md">
-                                            <a 
-                                                href="#mat-apostila" 
+                                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-center sm:justify-start gap-2 sm:gap-4 h-auto sm:h-12 md:h-14 py-3 sm:py-0 px-3 sm:px-4 bg-white dark:bg-black/20 border border-slate-200 dark:border-brand/20 rounded-md">
+                                            <button 
+                                                type="button" 
                                                 onClick={(e) => { e.preventDefault(); setMaterialType('Apostila'); }} 
-                                                className={`text-[11px] sm:text-xs font-bold uppercase transition-all ${materialType === 'Apostila' ? 'text-brand underline decoration-2 underline-offset-4' : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 hover:underline'}`}
+                                                className={`px-3 py-1.5 rounded-md text-[11px] sm:text-xs font-bold uppercase transition-all ${materialType === 'Apostila' ? 'bg-brand/20 text-brand dark:bg-brand/30 dark:text-brand-light' : 'text-slate-500 hover:text-slate-800 hover:bg-slate-200/50 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-white/5'}`}
                                             >
                                                 Apostila
-                                            </a>
-                                            <a 
-                                                href="#mat-atividade" 
+                                            </button>
+                                            <button 
+                                                type="button" 
                                                 onClick={(e) => { e.preventDefault(); setMaterialType('Atividade'); }} 
-                                                className={`text-[11px] sm:text-xs font-bold uppercase transition-all ${materialType === 'Atividade' ? 'text-brand underline decoration-2 underline-offset-4' : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 hover:underline'}`}
+                                                className={`px-3 py-1.5 rounded-md text-[11px] sm:text-xs font-bold uppercase transition-all ${materialType === 'Atividade' ? 'bg-brand/20 text-brand dark:bg-brand/30 dark:text-brand-light' : 'text-slate-500 hover:text-slate-800 hover:bg-slate-200/50 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-white/5'}`}
                                             >
                                                 Atividade
-                                            </a>
+                                            </button>
                                         </div>
                                     </div>
                                 ) : selectedType.id === 'practice' ? (
                                     <div className="space-y-2 sm:space-y-3">
                                         <label className="text-[10px] sm:text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest block">Tipo de Material</label>
                                         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6 h-auto sm:h-12 md:h-14 py-3 sm:py-0 px-3 sm:px-4 bg-white dark:bg-black/20 border border-slate-200 dark:border-brand/20 rounded-md opacity-70">
-                                            <a href="#mat-cert" onClick={(e) => e.preventDefault()} className="text-[11px] sm:text-xs font-bold uppercase text-brand underline decoration-2 underline-offset-4 cursor-default">
+                                            <button type="button" className="px-3 py-1.5 rounded-md text-[11px] sm:text-xs font-bold uppercase bg-brand/20 text-brand dark:bg-brand/30 dark:text-brand-light cursor-default">
                                                 Certificado
-                                            </a>
+                                            </button>
                                         </div>
                                     </div>
                                 ) : selectedType.id === 'mil_sci' ? (
                                     <div className="space-y-2 sm:space-y-3">
                                         <label className="text-[10px] sm:text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest block">Tipo de Material</label>
                                         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6 h-auto sm:h-12 md:h-14 py-3 sm:py-0 px-3 sm:px-4 bg-white dark:bg-black/20 border border-slate-200 dark:border-brand/20 rounded-md opacity-70">
-                                            <a href="#mat-apostila2" onClick={(e) => e.preventDefault()} className="text-[11px] sm:text-xs font-bold uppercase text-brand underline decoration-2 underline-offset-4 cursor-default">
+                                            <button type="button" className="px-3 py-1.5 rounded-md text-[11px] sm:text-xs font-bold uppercase bg-brand/20 text-brand dark:bg-brand/30 dark:text-brand-light cursor-default">
                                                 Apostila
-                                            </a>
+                                            </button>
                                         </div>
                                     </div>
                                 ) : selectedType.id === 'mil_career' ? (
                                     <div className="space-y-2 sm:space-y-3">
                                         <label className="text-[10px] sm:text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest block">Tipo de Material</label>
                                         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6 h-auto sm:h-12 md:h-14 py-3 sm:py-0 px-3 sm:px-4 bg-white dark:bg-black/20 border border-slate-200 dark:border-brand/20 rounded-md opacity-70">
-                                            <a href="#mat-apostila1-career" onClick={(e) => e.preventDefault()} className="text-[11px] sm:text-xs font-bold uppercase text-brand underline decoration-2 underline-offset-4 cursor-default">
+                                            <button type="button" className="px-3 py-1.5 rounded-md text-[11px] sm:text-xs font-bold uppercase bg-brand/20 text-brand dark:bg-brand/30 dark:text-brand-light cursor-default">
                                                 Apostila
-                                            </a>
+                                            </button>
                                         </div>
                                     </div>
                                 ) : (
