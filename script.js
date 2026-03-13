@@ -100,6 +100,31 @@ const { useState, useEffect, useMemo, useRef } = React;
         };
 
         // --- GLOBAL UTILS ---
+        
+        // Função para obter o Carimbo de data/hora atual obrigatoriamente no formato e fuso de Brasília
+        const getCurrentBRTString = () => {
+            return new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+        };
+
+        // Função para formatar uma data em uma string "YYYY-MM-DDThh:mm" no fuso horário de Brasília para o <input type="datetime-local">
+        const formatForInputBRT = (dateObj) => {
+            const d = dateObj || new Date();
+            const options = { timeZone: 'America/Sao_Paulo', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false };
+            const parts = new Intl.DateTimeFormat('en-GB', options).formatToParts(d);
+            const p = {};
+            parts.forEach(({ type, value }) => { p[type] = value; });
+            return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}`;
+        };
+
+        // Função para converter a string do input local "YYYY-MM-DDThh:mm" para o formato esperado da planilha em pt-BR
+        const formatInputToSheetBRT = (inputStr) => {
+            if (!inputStr) return "-";
+            const [datePart, timePart] = inputStr.split('T');
+            if (!datePart || !timePart) return inputStr;
+            const [year, month, day] = datePart.split('-');
+            return `${day}/${month}/${year}, ${timePart}:00`;
+        };
+
         const parseTSVGlobal = (tsv) => {
             let rows = [];
             let currentRow = [];
@@ -333,7 +358,12 @@ const { useState, useEffect, useMemo, useRef } = React;
             const [verdicts, setVerdicts] = useState({});
             const [individualScores, setIndividualScores] = useState({});
             const [individualComments, setIndividualComments] = useState({});
-            const [startTime, setStartTime] = useState(new Date());
+            
+            // Estado do horário agora é inicializado como string (formato "YYYY-MM-DDThh:mm") forçado em horário de Brasília
+            const [startTime, setStartTime] = useState(() => {
+                if (initialStartTime) return formatForInputBRT(initialStartTime);
+                return formatForInputBRT(new Date());
+            });
             const [isSendingSheet, setIsSendingSheet] = useState(false);
             
             const dropdownRef = useRef(null);
@@ -357,7 +387,7 @@ const { useState, useEffect, useMemo, useRef } = React;
             }, [students]);
 
             useEffect(() => {
-                if (initialStartTime) setStartTime(initialStartTime);
+                if (initialStartTime) setStartTime(formatForInputBRT(initialStartTime));
             }, [initialStartTime]);
 
             useEffect(() => {
@@ -408,7 +438,8 @@ const { useState, useEffect, useMemo, useRef } = React;
                 setIsSendingSheet(true);
 
                 try {
-                    const now = new Date();
+                    const carimboDataHoraBrt = getCurrentBRTString();
+                    
                     const payload = studentList.map(student => {
                         const verdict = verdicts[student] || 'Aprovado';
                         const scoreVal = individualScores[student] || (isAdminActivity ? 'Sim' : '0');
@@ -420,8 +451,8 @@ const { useState, useEffect, useMemo, useRef } = React;
                         const finalScore = isAdminActivity ? "" : scoreVal;
 
                         return {
-                            "Carimbo de data/hora": now.toLocaleString('pt-BR'),
-                            "Início": isAdminActivity ? "-" : startTime.toLocaleString('pt-BR'),
+                            "Carimbo de data/hora": carimboDataHoraBrt,
+                            "Início": isAdminActivity ? "-" : formatInputToSheetBRT(startTime),
                             "Aula aplicada": selectedType.name,
                             "Tipo": isAdminActivity ? "Atividade" : "Aula",
                             "Professor(a)": professor.nickname,
@@ -473,8 +504,6 @@ const { useState, useEffect, useMemo, useRef } = React;
                     setIsSendingSheet(false);
                 }
             };
-
-            const formatDateTimeForInput = (date) => { const d = new Date(date); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 16); };
 
             const updateStudentData = (student, field, value) => {
                 if (field === 'verdict') setVerdicts(prev => ({ ...prev, [student]: value }));
@@ -562,8 +591,8 @@ const { useState, useEffect, useMemo, useRef } = React;
 
                                 {!isAdminActivity && (
                                     <div className="space-y-2 sm:space-y-3">
-                                        <label htmlFor="data-inicio" className="text-[10px] sm:text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest block cursor-pointer">Horário de Início</label>
-                                        <input id="data-inicio" type="datetime-local" value={formatDateTimeForInput(startTime)} onChange={(e) => setStartTime(new Date(e.target.value))} className="w-full h-10 sm:h-12 md:h-14 px-3 sm:px-4 bg-white dark:bg-black/20 border border-slate-200 dark:border-brand/20 rounded-md text-xs sm:text-sm font-bold text-slate-700 dark:text-white focus:border-brand focus:ring-1 focus:ring-brand outline-none transition-all uppercase cursor-pointer" />
+                                        <label htmlFor="data-inicio" className="text-[10px] sm:text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest block cursor-pointer">Horário de Início (Brasília)</label>
+                                        <input id="data-inicio" type="datetime-local" value={startTime} onChange={(e) => setStartTime(e.target.value)} className="w-full h-10 sm:h-12 md:h-14 px-3 sm:px-4 bg-white dark:bg-black/20 border border-slate-200 dark:border-brand/20 rounded-md text-xs sm:text-sm font-bold text-slate-700 dark:text-white focus:border-brand focus:ring-1 focus:ring-brand outline-none transition-all uppercase cursor-pointer" />
                                     </div>
                                 )}
                             </div>
@@ -776,7 +805,20 @@ const { useState, useEffect, useMemo, useRef } = React;
                 if (!studentNick.trim()) return addToast('error', 'Erro', "Preencha o nickname do aluno.");
                 setPostingForum(true);
                 const status = result.approved ? 'Aprovado' : 'Reprovado';
-                const motivo = result.approved ? 'Cumpriu os requisitos.' : 'Não cumpriu os requisitos.';
+                
+                let motivo = 'Cumpriu os requisitos.';
+                if (!result.approved && result.missing.length > 0) {
+                    const missingNames = [...result.missing];
+                    if (missingNames.length === 1) {
+                        motivo = `Não cumpriu os requisitos, uma vez que não inseriu o(a): ${missingNames[0]}.`;
+                    } else {
+                        const last = missingNames.pop();
+                        motivo = `Não cumpriu os requisitos, uma vez que não inseriu o(a): ${missingNames.join(', ')} e ${last}.`;
+                    }
+                } else if (!result.approved) {
+                    motivo = 'Não cumpriu os requisitos.';
+                }
+
                 const message = `[font=Poppins][center][color=#528c16][b]RESULTADO DA ATIVIDADE[/b][/color][/center]\n\n[color=#528c16][b]Professor(a):[/b][/color] ${currentUser.nickname}\n[color=#528c16][b]Aluno(a):[/b][/color] ${studentNick}\n[color=#528c16][b]Veredito:[/b][/color] ${status}\n[color=#528c16][b]Motivo(s):[/b][/color] ${motivo}\n[color=#528c16][b]Spoiler:[/b][/color]\n[spoiler="Atividade"]${bbcodeInput}[/spoiler][/font]`;
 
                 try {
@@ -1010,7 +1052,7 @@ const { useState, useEffect, useMemo, useRef } = React;
 
                 try {
                     const payload = [{
-                        "Carimbo de data/hora": new Date().toLocaleString('pt-BR'),
+                        "Carimbo de data/hora": getCurrentBRTString(),
                         "Nickname": professor.nickname,
                         "Aula/Curso": selectedType.name,
                         "Linha da planilha": rowNumber,
